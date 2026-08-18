@@ -1,3 +1,2 @@
-# Gold_shop_management
-
-h
+# Gold Shop Management
+A lightweight, console-based inventory management and automated retail billing engine implemented in standard ANSI C. This software provides jewelry boutiques with an efficient operational terminal to track gold asset reserves, adjust dynamic valuation indices based on metal purity (karats), and instantly output structured consumer billing receipts featuring precise financial breakdowns.
