@@ -4,8 +4,19 @@ A simple Space Invaders-style arcade game written in C for the Windows console.
 
 The game features real-time keyboard controls, moving aliens, player and enemy bullets, scoring, lives, collision detection, and win/game-over conditions.
 
-## 🚀 Core Features
-Dynamic Market Matrix: Real-time interactive terminal updates for fluctuating 24K, 22K, and 18K raw gold market prices per gram.Comprehensive Inventory Ledger: Tracks complete asset metadata including unique identification keys, catalog categories, precise item weights, crafting/making charges, and localized stock depths.Automated Transaction Terminal: Features an integrated checkout workflow that validates stock availability, deducts sold quantities, computes raw commodity weights against structural purity rules, and incorporates a standard 5% VAT rate.Memory Buffer Guardrails: Implements clean loop-handling mechanisms and parsing input flushes to defend the system console against terminal string overflows or unexpected datatype evaluation failures.
+🎮 Features
+Real-time keyboard controls — no Enter key required
+Move the spaceship left and right
+Shoot multiple bullets
+Aliens move horizontally and descend when reaching the edge
+Random enemy shooting
+Bullet collision detection
+Score system
+3-player-lives system
+Win condition when all aliens are destroyed
+Game-over condition when all lives are lost or aliens reach the player
+Console cursor hiding for a cleaner game experience
+Simple ASCII-based graphics
 ## 🛠️ System Architecture & Data Models
 The management system organizes local memory boundaries using structural struct record mappings to manage entities systematically.
 
