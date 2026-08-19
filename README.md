@@ -19,9 +19,9 @@ This project was built collaboratively by a team of 4 members, each designing an
 
 ## 🎮 Features
 
-Real-time keyboard controls — no Enter key required
+ - Real-time keyboard controls — no Enter key required
 
-Move the spaceship left and right
+ - Move the spaceship left and right
 
 Shoot multiple bullets
 
