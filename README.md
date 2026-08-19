@@ -43,17 +43,14 @@ This project was built collaboratively by a team of 4 members, each designing an
 
 - Simple ASCII-based graphics
 
-## 🕹️ Controls
+## 🎮 Controls
 
-Key	Action
-
-```A```-   Move left
-
-```D```-   Move right
-
-```SPACE``` ```Shoot```
-
-```Q```-```Quit```
+| Key | Action |
+|-----|--------|
+| `A` | Move left |
+| `D` | Move right |
+| `SPACE` | Shoot |
+| `Q` | Quit |
 
 No Enter key is required for gameplay. The game starts as soon as the code is run on Code::Blocks.
 
