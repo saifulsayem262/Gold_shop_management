@@ -89,7 +89,7 @@ Or on Windows:
 ## 🎯 Gameplay
 
 You control the spaceship at the bottom of the screen:
-
+```
 ############################################################
 #                                                          #
 #       W      W      W      W      W      W      W        #
@@ -100,7 +100,7 @@ You control the spaceship at the bottom of the screen:
 #                                                          #
 #                       < ^ >                              #
 ############################################################
-
+```
 Destroy the aliens before they reach your spaceship.
 
 Each alien destroyed gives you:
