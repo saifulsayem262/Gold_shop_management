@@ -47,9 +47,9 @@ This project was built collaboratively by a team of 4 members, each designing an
 
 Key	Action
 
-``` A```-```Move left```
+``` A```-   Move left
 
-```D```-```Move right```
+```D```-   Move right
 
 ```SPACE``` ```Shoot```
 
