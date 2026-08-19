@@ -45,7 +45,7 @@ This project was built collaboratively by a team of 4 members, each designing an
 
 ## 🎮 Controls
 
-A           left
+A           = left
 
 No Enter key is required for gameplay. The game starts as soon as the code is run on Code::Blocks.
 
