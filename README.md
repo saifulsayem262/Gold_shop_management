@@ -92,18 +92,33 @@ You control the spaceship at the bottom of the screen:
 ```
 ############################################################
 #                                                          #
-#       W      W      W      W      W      W      W        #
 #                                                          #
-#       W      W      W      W      W      W      W        #
-#                 !                                        #
-#       W      W      W      W      W      W      W        #
 #                                                          #
-#       W      W      W      W      W      W      W        #
-#                                          !               #
-#                         |                                #
-#           !                                              #
-#                       < ^ >                              #
+#                                                          #
+#                                                          #
+#     W     W     W     W     W     W     W     W          #
+#                                                          #
+#     W     W     W     W     W     W     W     W          #
+#                                                          #
+#     W     W     W     W     W     W     W     W          #
+#                                                          #
+#     W     W     W     W     W     W     W     W          #
+#                                                          #
+#                                                          #
+#                                                          #
+#                                                          #
+#                                                          #
+#                                                          #
+#                                                          #
+#                                                          #
+#                             |                            #
+#                            <^>                           #
+#                                                          #
 ############################################################
+
+ SCORE: 0         LIVES: 2
+
+ A/D = MOVE    SPACE = SHOOT    Q = QUIT
 ```
 Destroy the aliens before they reach your spaceship.
 
