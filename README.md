@@ -4,6 +4,19 @@ A simple Space Invaders-style arcade game written in C for the Windows console.
 
 The game features real-time keyboard controls, moving aliens, player and enemy bullets, scoring, lives, collision detection, and win/game-over conditions.
 
+## 👥 Contributors & Module Breakdown
+
+This project was built collaboratively by a team of 4 members, each designing and implementing specific mathematical modules:
+
+| Contributor | Assigned Modules & Features |
+| :--- | :--- |
+| **Saiful** | Structures (Aliens and Bullets) |
+| **I** | gamestate |
+| **me** | graphics |
+| **myself** | Debugging |
+
+---
+
 ## 🎮 Features
 
 Real-time keyboard controls — no Enter key required
