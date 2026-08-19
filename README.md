@@ -23,25 +23,25 @@ This project was built collaboratively by a team of 4 members, each designing an
 
 - Move the spaceship left and right
 
-Shoot multiple bullets
+- Shoot multiple bullets
 
-Aliens move horizontally and descend when reaching the edge
+- Aliens move horizontally and descend when reaching the edge
 
-Random enemy shooting
+- Random enemy shooting
 
-Bullet collision detection
+- Bullet collision detection
 
-Score system
+- Score system
 
-3-player-lives system
+- 3-player-lives system
 
-Win condition when all aliens are destroyed
+- Win condition when all aliens are destroyed
 
-Game-over condition when all lives are lost or aliens reach the player
+- Game-over condition when all lives are lost or aliens reach the player
 
-Console cursor hiding for a cleaner game experience
+- Console cursor hiding for a cleaner game experience
 
-Simple ASCII-based graphics
+- Simple ASCII-based graphics
 
 ## 🕹️ Controls
 
