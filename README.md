@@ -54,5 +54,59 @@ Q                            Quit
 
 No Enter key is required for gameplay. The game starts as soon as the code is run on Code::Blocks.
 
-## 💻 Compilation and Execution
-This utility is completely cross-platform and requires only a basic C compiler toolchain (such as GCC or Clang).
+🖥️ Requirements
+
+This project is designed for Windows because it uses:
+
+- conio.h
+- windows.h
+- MinGW/GCC
+
+You will need:
+
+- Windows
+- GCC / MinGW
+- A Windows terminal or console
+
+## ⚙️ Compilation
+
+Save the source code as:
+
+`space_invaders.c`
+
+Compile it with MinGW:
+
+`gcc space_invaders.c -o space_invaders`
+
+Then run:
+
+`space_invaders`
+
+Or on Windows:
+
+`space_invaders.exe`
+
+## 🎯 Gameplay
+
+You control the spaceship at the bottom of the screen:
+
+############################################################
+#                                                          #
+#       W      W      W      W      W      W      W        #
+#                                                          #
+#       W      W      W      W      W      W      W        #
+#                                                          #
+#                         |                                #
+#                                                          #
+#                       < ^ >                              #
+############################################################
+
+Destroy the aliens before they reach your spaceship.
+
+Each alien destroyed gives you:
+
++10 points
+
+You start with:
+
+Lives: `3`
