@@ -47,16 +47,15 @@ This project was built collaboratively by a team of 4 members, each designing an
 
 Key	Action
 
-``` A```          ```Move left```
+``` A```-```Move left```
 
-D	Move right
+```D```-```Move right```
 
-SPACE	Shoot
+```SPACE``` ```Shoot```
 
-Q	Quit
+```Q```-```Quit```
 
-
-No Enter key is required for gameplay.
+No Enter key is required for gameplay. The game starts as soon as the code is run on Code::Blocks.
 
 ## 💻 Compilation and Execution
 This utility is completely cross-platform and requires only a basic C compiler toolchain (such as GCC or Clang).
