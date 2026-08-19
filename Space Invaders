@@ -1,0 +1,682 @@
+/*
+ * SPACE INVADERS CLONE
+ * =====================
+ *
+ * Real-time keyboard controls.
+ *
+ * Libraries:
+ *   stdio.h
+ *   stdlib.h
+ *   time.h
+ *   conio.h
+ *   windows.h
+ *
+ * Controls:
+ *   A       = Move Left
+ *   D       = Move Right
+ *   SPACE   = Shoot
+ *   Q       = Quit
+ *
+ * No Enter key is required.
+ *
+ * Compile with MinGW:
+ *   gcc space_invaders.c -o space_invaders
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <conio.h>
+#include <windows.h>
+
+#define WIDTH 60
+#define HEIGHT 25
+
+#define ALIEN_ROWS 4
+#define ALIEN_COLS 8
+
+#define MAX_BULLETS 50
+
+/* ---------------------------------------------------------
+   Structures
+   --------------------------------------------------------- */
+
+typedef struct
+{
+    int x;
+    int y;
+    int alive;
+} Alien;
+
+typedef struct
+{
+    int x;
+    int y;
+    int active;
+} Bullet;
+
+/* ---------------------------------------------------------
+   Game variables
+   --------------------------------------------------------- */
+
+Alien aliens[ALIEN_ROWS][ALIEN_COLS];
+
+Bullet playerBullets[MAX_BULLETS];
+Bullet enemyBullets[MAX_BULLETS];
+
+int playerX;
+int playerY;
+
+int score;
+int lives;
+
+int alienDirection;
+int alienMoveTimer;
+
+int gameRunning = 1;
+
+/* ---------------------------------------------------------
+   Hide cursor
+   --------------------------------------------------------- */
+
+void hideCursor(void)
+{
+    HANDLE consoleHandle;
+    CONSOLE_CURSOR_INFO cursorInfo;
+
+    consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    GetConsoleCursorInfo(consoleHandle, &cursorInfo);
+
+    cursorInfo.bVisible = FALSE;
+
+    SetConsoleCursorInfo(consoleHandle, &cursorInfo);
+}
+
+/* ---------------------------------------------------------
+   Show cursor
+   --------------------------------------------------------- */
+
+void showCursor(void)
+{
+    HANDLE consoleHandle;
+    CONSOLE_CURSOR_INFO cursorInfo;
+
+    consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    GetConsoleCursorInfo(consoleHandle, &cursorInfo);
+
+    cursorInfo.bVisible = TRUE;
+
+    SetConsoleCursorInfo(consoleHandle, &cursorInfo);
+}
+
+/* ---------------------------------------------------------
+   Move cursor to top-left
+   --------------------------------------------------------- */
+
+void moveCursorHome(void)
+{
+    COORD position;
+
+    position.X = 0;
+    position.Y = 0;
+
+    SetConsoleCursorPosition(
+        GetStdHandle(STD_OUTPUT_HANDLE),
+        position
+    );
+}
+
+/* ---------------------------------------------------------
+   Initialize game
+   --------------------------------------------------------- */
+
+void initializeGame(void)
+{
+    int r, c, i;
+
+    playerX = WIDTH / 2;
+    playerY = HEIGHT - 3;
+
+    score = 0;
+    lives = 3;
+
+    alienDirection = 1;
+    alienMoveTimer = 0;
+
+    /* Create aliens */
+    for (r = 0; r < ALIEN_ROWS; r++)
+    {
+        for (c = 0; c < ALIEN_COLS; c++)
+        {
+            aliens[r][c].x = 8 + c * 6;
+            aliens[r][c].y = 3 + r * 2;
+            aliens[r][c].alive = 1;
+        }
+    }
+
+    /* Clear bullets */
+    for (i = 0; i < MAX_BULLETS; i++)
+    {
+        playerBullets[i].active = 0;
+        enemyBullets[i].active = 0;
+    }
+}
+
+/* ---------------------------------------------------------
+   Draw game
+   --------------------------------------------------------- */
+
+void drawGame(void)
+{
+    char screen[HEIGHT][WIDTH];
+
+    int r, c, i;
+
+    /* Fill screen */
+    for (r = 0; r < HEIGHT; r++)
+    {
+        for (c = 0; c < WIDTH; c++)
+        {
+            screen[r][c] = ' ';
+        }
+    }
+
+    /* Top and bottom borders */
+    for (c = 0; c < WIDTH; c++)
+    {
+        screen[0][c] = '#';
+        screen[HEIGHT - 1][c] = '#';
+    }
+
+    /* Side borders */
+    for (r = 0; r < HEIGHT; r++)
+    {
+        screen[r][0] = '#';
+        screen[r][WIDTH - 1] = '#';
+    }
+
+    /* -----------------------------------------------------
+       Draw aliens
+       ----------------------------------------------------- */
+
+    for (r = 0; r < ALIEN_ROWS; r++)
+    {
+        for (c = 0; c < ALIEN_COLS; c++)
+        {
+            if (aliens[r][c].alive)
+            {
+                int x = aliens[r][c].x;
+                int y = aliens[r][c].y;
+
+                if (x > 0 && x < WIDTH &&
+                    y > 0 && y < HEIGHT)
+                {
+                    screen[y][x] = 'W';
+                }
+            }
+        }
+    }
+
+    /* -----------------------------------------------------
+       Draw player spaceship
+       ----------------------------------------------------- */
+
+    if (playerY > 0 && playerY < HEIGHT)
+    {
+        screen[playerY][playerX] = '^';
+
+        if (playerX > 1)
+            screen[playerY][playerX - 1] = '<';
+
+        if (playerX < WIDTH - 2)
+            screen[playerY][playerX + 1] = '>';
+    }
+
+    /* -----------------------------------------------------
+       Draw player bullets
+       ----------------------------------------------------- */
+
+    for (i = 0; i < MAX_BULLETS; i++)
+    {
+        if (playerBullets[i].active)
+        {
+            int x = playerBullets[i].x;
+            int y = playerBullets[i].y;
+
+            if (x > 0 && x < WIDTH &&
+                y > 0 && y < HEIGHT)
+            {
+                screen[y][x] = '|';
+            }
+        }
+    }
+
+    /* -----------------------------------------------------
+       Draw enemy bullets
+       ----------------------------------------------------- */
+
+    for (i = 0; i < MAX_BULLETS; i++)
+    {
+        if (enemyBullets[i].active)
+        {
+            int x = enemyBullets[i].x;
+            int y = enemyBullets[i].y;
+
+            if (x > 0 && x < WIDTH &&
+                y > 0 && y < HEIGHT)
+            {
+                screen[y][x] = '!';
+            }
+        }
+    }
+
+    /* Move cursor to beginning */
+    moveCursorHome();
+
+    /* Print screen */
+    for (r = 0; r < HEIGHT; r++)
+    {
+        for (c = 0; c < WIDTH; c++)
+        {
+            putchar(screen[r][c]);
+        }
+
+        putchar('\n');
+    }
+
+    printf("\n");
+    printf(" SCORE: %-5d     LIVES: %d\n", score, lives);
+    printf("\n");
+    printf(" A/D = MOVE    SPACE = SHOOT    Q = QUIT\n");
+
+    fflush(stdout);
+}
+
+/* ---------------------------------------------------------
+   Player shoots
+   --------------------------------------------------------- */
+
+void playerShoot(void)
+{
+    int i;
+
+    for (i = 0; i < MAX_BULLETS; i++)
+    {
+        if (!playerBullets[i].active)
+        {
+            playerBullets[i].x = playerX;
+            playerBullets[i].y = playerY - 1;
+            playerBullets[i].active = 1;
+
+            return;
+        }
+    }
+}
+
+/* ---------------------------------------------------------
+   Enemy shoots
+   --------------------------------------------------------- */
+
+void enemyShoot(void)
+{
+    int aliveAliens[ALIEN_ROWS * ALIEN_COLS];
+
+    int count = 0;
+    int r, c;
+    int selected;
+
+    /* Find living aliens */
+    for (r = 0; r < ALIEN_ROWS; r++)
+    {
+        for (c = 0; c < ALIEN_COLS; c++)
+        {
+            if (aliens[r][c].alive)
+            {
+                aliveAliens[count] =
+                    r * ALIEN_COLS + c;
+
+                count++;
+            }
+        }
+    }
+
+    if (count == 0)
+        return;
+
+    /* Select random alien */
+    selected = aliveAliens[rand() % count];
+
+    r = selected / ALIEN_COLS;
+    c = selected % ALIEN_COLS;
+
+    /* Create bullet */
+    for (int i = 0; i < MAX_BULLETS; i++)
+    {
+        if (!enemyBullets[i].active)
+        {
+            enemyBullets[i].x = aliens[r][c].x;
+            enemyBullets[i].y = aliens[r][c].y + 1;
+            enemyBullets[i].active = 1;
+
+            return;
+        }
+    }
+}
+
+/* ---------------------------------------------------------
+   Update player bullets
+   --------------------------------------------------------- */
+
+void updatePlayerBullets(void)
+{
+    int i, r, c;
+
+    for (i = 0; i < MAX_BULLETS; i++)
+    {
+        if (!playerBullets[i].active)
+            continue;
+
+        /* Move upward */
+        playerBullets[i].y--;
+
+        /* Outside screen */
+        if (playerBullets[i].y <= 1)
+        {
+            playerBullets[i].active = 0;
+            continue;
+        }
+
+        /* Check collision */
+        for (r = 0; r < ALIEN_ROWS; r++)
+        {
+            for (c = 0; c < ALIEN_COLS; c++)
+            {
+                if (!aliens[r][c].alive)
+                    continue;
+
+                if (playerBullets[i].x ==
+                        aliens[r][c].x &&
+                    playerBullets[i].y ==
+                        aliens[r][c].y)
+                {
+                    aliens[r][c].alive = 0;
+
+                    playerBullets[i].active = 0;
+
+                    score += 10;
+
+                    break;
+                }
+            }
+
+            if (!playerBullets[i].active)
+                break;
+        }
+    }
+}
+
+/* ---------------------------------------------------------
+   Update enemy bullets
+   --------------------------------------------------------- */
+
+void updateEnemyBullets(void)
+{
+    int i;
+
+    for (i = 0; i < MAX_BULLETS; i++)
+    {
+        if (!enemyBullets[i].active)
+            continue;
+
+        /* Move downward */
+        enemyBullets[i].y++;
+
+        /* Outside screen */
+        if (enemyBullets[i].y >= HEIGHT - 1)
+        {
+            enemyBullets[i].active = 0;
+            continue;
+        }
+
+        /* Hit player */
+        if (enemyBullets[i].x == playerX &&
+            enemyBullets[i].y == playerY)
+        {
+            enemyBullets[i].active = 0;
+
+            lives--;
+
+            /* Reset player */
+            playerX = WIDTH / 2;
+
+            /* Clear enemy bullets */
+            for (int j = 0; j < MAX_BULLETS; j++)
+            {
+                enemyBullets[j].active = 0;
+            }
+        }
+    }
+}
+
+/* ---------------------------------------------------------
+   Update aliens
+   --------------------------------------------------------- */
+
+void updateAliens(void)
+{
+    int r, c;
+    int hitEdge = 0;
+
+    alienMoveTimer++;
+
+    /* Aliens move every few frames */
+    if (alienMoveTimer < 6)
+        return;
+
+    alienMoveTimer = 0;
+
+    /* Check edges */
+    for (r = 0; r < ALIEN_ROWS; r++)
+    {
+        for (c = 0; c < ALIEN_COLS; c++)
+        {
+            if (!aliens[r][c].alive)
+                continue;
+
+            if (aliens[r][c].x + alienDirection <= 2 ||
+                aliens[r][c].x + alienDirection >= WIDTH - 3)
+            {
+                hitEdge = 1;
+            }
+        }
+    }
+
+    /* Change direction and move down */
+    if (hitEdge)
+    {
+        alienDirection *= -1;
+
+        for (r = 0; r < ALIEN_ROWS; r++)
+        {
+            for (c = 0; c < ALIEN_COLS; c++)
+            {
+                if (aliens[r][c].alive)
+                    aliens[r][c].y++;
+            }
+        }
+    }
+
+    /* Move horizontally */
+    for (r = 0; r < ALIEN_ROWS; r++)
+    {
+        for (c = 0; c < ALIEN_COLS; c++)
+        {
+            if (aliens[r][c].alive)
+            {
+                aliens[r][c].x += alienDirection;
+            }
+        }
+    }
+
+    /* Enemy occasionally shoots */
+    if (rand() % 5 == 0)
+        enemyShoot();
+}
+
+/* ---------------------------------------------------------
+   Count living aliens
+   --------------------------------------------------------- */
+
+int aliensRemaining(void)
+{
+    int r, c;
+    int count = 0;
+
+    for (r = 0; r < ALIEN_ROWS; r++)
+    {
+        for (c = 0; c < ALIEN_COLS; c++)
+        {
+            if (aliens[r][c].alive)
+                count++;
+        }
+    }
+
+    return count;
+}
+
+/* ---------------------------------------------------------
+   Check game over
+   --------------------------------------------------------- */
+
+int checkGameOver(void)
+{
+    int r, c;
+
+    /* Player has no lives */
+    if (lives <= 0)
+        return 1;
+
+    /* Aliens reached player */
+    for (r = 0; r < ALIEN_ROWS; r++)
+    {
+        for (c = 0; c < ALIEN_COLS; c++)
+        {
+            if (aliens[r][c].alive &&
+                aliens[r][c].y >= playerY)
+            {
+                return 1;
+            }
+        }
+    }
+
+    return 0;
+}
+
+/* ---------------------------------------------------------
+   Main game
+   --------------------------------------------------------- */
+
+int main(void)
+{
+    srand((unsigned int)time(NULL));
+
+    /* Clear console */
+    system("cls");
+
+    hideCursor();
+
+    initializeGame();
+
+    /* Draw initial screen */
+    drawGame();
+
+    while (gameRunning)
+    {
+        /*
+         * Check keyboard without waiting for Enter.
+         */
+        if (_kbhit())
+        {
+            int key = _getch();
+
+            /* Quit */
+            if (key == 'q' || key == 'Q')
+            {
+                gameRunning = 0;
+            }
+
+            /* Move left */
+            else if (key == 'a' || key == 'A')
+            {
+                if (playerX > 2)
+                    playerX--;
+            }
+
+            /* Move right */
+            else if (key == 'd' || key == 'D')
+            {
+                if (playerX < WIDTH - 3)
+                    playerX++;
+            }
+
+            /* Shoot */
+            else if (key == ' ')
+            {
+                playerShoot();
+            }
+        }
+
+        /* Update game */
+        updatePlayerBullets();
+        updateEnemyBullets();
+        updateAliens();
+
+        /* Draw */
+        drawGame();
+
+        /* Win */
+        if (aliensRemaining() == 0)
+        {
+            moveCursorHome();
+
+            printf("\n\n");
+            printf("#       ============================================\n");
+            printf("#                     YOU WIN!\n");
+            printf("#       ============================================\n");
+            printf("#                     SCORE: %d\n", score);
+            printf("#       ============================================\n");
+
+            gameRunning = 0;
+        }
+
+        /* Game over */
+        if (checkGameOver())
+        {
+            moveCursorHome();
+
+            printf("\n\n");
+            printf("#       ============================================\n");
+            printf("#                    GAME OVER!\n");
+            printf("#       ============================================\n");
+            printf("#                     SCORE: %d\n", score);
+            printf("#       ============================================\n");
+
+            gameRunning = 0;
+        }
+
+        /*
+         * Controls game speed.
+         * Lower value = faster game.
+         */
+        Sleep(80);
+    }
+
+    showCursor();
+
+    printf("\n#       Press any key to exit...");
+    _getch();
+
+    return 0;
+}
