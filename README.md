@@ -95,9 +95,13 @@ You control the spaceship at the bottom of the screen:
 #       W      W      W      W      W      W      W        #
 #                                                          #
 #       W      W      W      W      W      W      W        #
+#                 !                                        #
+#       W      W      W      W      W      W      W        #
 #                                                          #
+#       W      W      W      W      W      W      W        #
+#                                          !               #
 #                         |                                #
-#                                                          #
+#           !                                              #
 #                       < ^ >                              #
 ############################################################
 ```
