@@ -4,11 +4,16 @@ A simple Space Invaders-style arcade game written in C for the Windows console.
 
 The game features real-time keyboard controls, moving aliens, player and enemy bullets, scoring, lives, collision detection, and win/game-over conditions.
 
-🎮 Features
+## 🎮 Features
+
 Real-time keyboard controls — no Enter key required
+
 Move the spaceship left and right
+
 Shoot multiple bullets
+
 Aliens move horizontally and descend when reaching the edge
+
 Random enemy shooting
 Bullet collision detection
 Score system
