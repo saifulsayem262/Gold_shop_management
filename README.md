@@ -15,23 +15,35 @@ Shoot multiple bullets
 Aliens move horizontally and descend when reaching the edge
 
 Random enemy shooting
+
 Bullet collision detection
+
 Score system
+
 3-player-lives system
+
 Win condition when all aliens are destroyed
+
 Game-over condition when all lives are lost or aliens reach the player
+
 Console cursor hiding for a cleaner game experience
+
 Simple ASCII-based graphics
-## 🛠️ System Architecture & Data Models
-The management system organizes local memory boundaries using structural struct record mappings to manage entities systematically.
 
-**1. Market Value Mapping**
+## 🕹️ Controls
 
-Stores current market valuation indices per gram for various purity categories:
+Key	Action
 
-**2. Jewelry Stock Schema**
+A	Move left
 
-Structures product parameter elements within the central memory buffer array:
+D	Move right
+
+SPACE	Shoot
+
+Q	Quit
+
+
+No Enter key is required for gameplay.
 
 ## 💻 Compilation and Execution
 This utility is completely cross-platform and requires only a basic C compiler toolchain (such as GCC or Clang).
