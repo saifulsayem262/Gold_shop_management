@@ -47,8 +47,11 @@ This project was built collaboratively by a team of 4 members, each designing an
 
 ```
 A                            Move Left
+
 D                            Move Right
+
 Space                        Shoot
+
 Q                            Quit
 ```
 
